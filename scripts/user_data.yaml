@@ -1,0 +1,28 @@
+#cloud-config
+
+hostname: demo-app1
+fqdn:                   # <- Enter FQDN
+manage_etc_hosts: true
+
+# boot commands
+bootcmd:
+- sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+- setenforce 0
+
+# update repos
+repo_update: true
+repo_upgrade: all
+
+# update packages
+package_upgrade: true
+
+# install packages
+packages:
+  - epel-release
+  - httpd
+
+# run commands
+runcmd:
+  - echo "Hello, This is test app." >> /var/www/html/index.html
+  - sudo systemctl enable httpd
+  - sudo systemctl start httpd
